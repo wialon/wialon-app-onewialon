@@ -4,16 +4,16 @@ This is WEB application based on Apps from Gurtam (http://apps.wialon.com).
 ## Description
 Wialon One app represents basic user interface created on the basis of Wialon Kit tools.
 
-## License:
+## License
 LGPL: http://www.gnu.org/licenses/lgpl.html
 
-## Requirements:
+## Requirements
  * Browser: Google Chome 20+, Firefox 15+, Safari 5+, IE 9+, Opera 10+
  * Language: русский, English
  * Components: SDK
  * URL params: Active SID, Host URL, Current user, Language, Base URL
 
-## Quick start:
+## Quick start
 Apps activation through the management system: http://docs.gurtam.com/en/hosting/cms/apps/apps  
 Working with applications in the GPS tracking system: http://docs.gurtam.com/en/hosting/user/apps/apps
 
