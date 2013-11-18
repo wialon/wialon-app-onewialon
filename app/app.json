@@ -1,0 +1,54 @@
+{
+	"name": "one_wialon",
+	"url_name": "onewialon",
+	"title": "One Wialon",
+	"description": "Represents basic user interface created on the basis of Wialon Kit tools.",
+	"author": {
+		"name": "",
+		"url": "http://gurtam.com"
+	},
+	"licenses": [
+		{
+			"type":" LGPL",
+			"url": "http://www.gnu.org/licenses/lgpl.html"
+		}
+	],
+	"dependencies": {
+		"jquery": "1.8.3"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wialon/wialon-app-onewialon"
+	},
+	"modules": [
+		"SDK"
+	],
+	"params": [
+		"Active SID",
+		"Base URL",
+		"Host URL",
+		"Language",
+		"Current user"
+	],
+	"language": [
+		"en",
+		"ru"
+	],
+	"build_date": "2013-11-18",
+	"version": "1.4",
+	"keywords": [
+		"wialon",
+		"wialon-apps",
+		"wialon one"
+	],
+	"browser": {
+		"ie": "9+",
+		"opera": "10+",
+		"safari": "5+",
+		"chrome": "20+",
+		"firefox": "15+"
+	},
+	"logo": "logo.png",
+	"images_path": "images",
+	"desc_path": "desc"
+}
