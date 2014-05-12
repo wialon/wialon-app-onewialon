@@ -2,7 +2,7 @@
 	"name": "one_wialon",
 	"url_name": "onewialon",
 	"title": "One Wialon",
-	"description": "Represents basic user interface created on the basis of Wialon Kit tools.",
+	"description": "Represents basic user interface created on the basis of Wialon Kit tools. The basic interface includes main tracking capabilities: the available tracking units list, the possibility to track them on the map in real time and check their speed indicators, etc.",
 	"author": {
 		"name": "",
 		"url": "http://gurtam.com"
@@ -21,7 +21,7 @@
 		"url": "https://github.com/wialon/wialon-app-onewialon"
 	},
 	"modules": [
-		"SDK"
+		"sdk"
 	],
 	"params": [
 		"Active SID",
@@ -34,8 +34,9 @@
 		"en",
 		"ru"
 	],
-	"build_date": "2013-11-26",
-	"version": "1.4",
+	"build_date": "2014-05-12",
+	"release_date": "2013-03-18",
+	"version": "1.5",
 	"keywords": [
 		"wialon",
 		"wialon-apps",

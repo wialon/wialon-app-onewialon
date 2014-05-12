@@ -127,13 +127,13 @@ OpenLayers.GMarker = OpenLayers.Class(OpenLayers.Marker, {
 	var lastMessage = this.unit.getLastMessage();
 	var tm = "-";
 	if(lastMessage)
-		tm = lastMessage.t;	    
-	tm = tm!="-"?wialon.util.DateTime.formatDate(tm)+"  "+wialon.util.DateTime.formatTime(tm,2):tm;
+		tm = lastMessage.t;
+    tm = tm!="-"?wialon.util.DateTime.formatTime(tm, 0, enFormatTime):tm; // enFormatTime define in main.js
 	//speed
 	var speed = "-";
 	if(this.unit.getPosition()) {
 		var pos = this.unit.getPosition();
-		speed = pos.s + "&nbsp;" + $.localise.tr("km/h");
+		speed = ((this.getMeasureUnits()) ? Math.round( pos.s / 1.609344) : pos.s) + "&nbsp;" + ((this.getMeasureUnits()) ? $.localise.tr("mph") : $.localise.tr("km/h"));
 		wialon.util.Gis.getLocations([{lat:pos.y,lon:pos.x}],function(code,data) {
 			if(code)
 				$("#marker_tooltip_"+id).html("-");
@@ -205,7 +205,18 @@ OpenLayers.GMarker = OpenLayers.Class(OpenLayers.Marker, {
         else { 
             return true; 
         } 
-    }, 
+    },
+
+    /**
+     * Method: getMeasureUnits
+     * Get Measure Units
+     *
+     * Returns:
+     *   Measure Units - 1 or 0
+     */
+    getMeasureUnits: function() {
+        return this.unit.getMeasureUnits() ;
+    },
     
     CLASS_NAME: "OpenLayers.Marker.Label" 
 }); 

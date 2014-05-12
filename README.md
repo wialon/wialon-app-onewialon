@@ -1,4 +1,4 @@
-# Wialon One, version 1.4: (June 14, 2013)
+# Wialon One, version 1.5: (May 12, 2014) 
 This is WEB application based on Apps from Gurtam (http://apps.wialon.com).
 
 ## Description
@@ -22,11 +22,16 @@ Working with applications in the GPS tracking system: http://docs.gurtam.com/en/
 - initial release
 
  * v1.2 (May 06, 2013)  
-- Добавлена поддержка русского языка
+- russian language added
 
  * v1.3 (May 07, 2013)  
-- Добавлены тултипы к маркерам, содержащие информацию о времени последнего сообщения, скорости и местоположении объекта
+- added tooltips for markers with information: last message time, speed, unit position
 
  * v1.4 (June 14, 2013)  
-- Добавлена поддержка параметра Current user
-- Исправлена ошибка отображения в iframe в Opera
+- "Current user" parameter support added
+- Opera iframe fix
+
+ * v1.5 (May 12, 2014)  
+- US metrics added
+- time mask support added
+- fixed GIS geocoding address format

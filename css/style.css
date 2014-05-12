@@ -82,6 +82,9 @@ a{
 	border-bottom: 1px solid #d1ddea;	
 	color: #21344f;
 }
+.tbl td[id^="unit_time"]{
+    white-space: nowrap;
+}
 
 .tbl th{
 	padding: 5px;

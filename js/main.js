@@ -162,37 +162,55 @@ function initEnv() {
 		if(code) {
 			alert("Error ["+ code +"]: " + wialon.core.Errors.getErrorText(code));
 			return;
-		}		
-		
-		// init map options
-		OpenLayers.ImgPath = "./img/";					
-		
-		// options for GurtmMaps layer
-		var opts = {};
-		opts.maxExtent = new OpenLayers.Bounds(-20037508.3427892,-20037508.3427892,20037508.3427892,20037508.3427892);
-		opts.numZoomLevels = 19;
-		opts.maxResolution = 156543.0339;
-		opts.units = 'm';
-		opts.projection = "EPSG:900913";
-		opts.displayProjection = new OpenLayers.Projection("EPSG:4326");
-		// create layer
-		var gurtamMaps = new OpenLayers.Layer.WebGIS("Gurtam Maps", wialon.core.Session.getInstance().getBaseGisUrl("render"), opts);
-		
-		opts.controls = [new OpenLayers.Control.GPanZoomBar(), new OpenLayers.Control.GNavigation(), new OpenLayers.Control.KeyboardDefaults()];
-		
-		// create map
-		map = new OpenLayers.GMap("map_id", opts);		
-		map.addLayer(gurtamMaps);
-		map.zoomToMaxExtent();
-				
-		// create markers layer
-		var markersLayer = new OpenLayers.Layer.Markers("markers");
-		layerId = markersLayer.id;
-		markersLayer.setVisibility(true);
-		map.addLayer(markersLayer);
+		}
 
-		// init unit table
-		showUnits();
+				// get & set address format for GIS geocoding
+				var address_format = wialon.core.Session.getInstance().getCurrUser().getCustomProperty("us_addr_fmt", "");
+				if (address_format) {
+					var addr_fmt = address_format.split("_");
+					if (addr_fmt)
+						wialon.util.Gis.geocodingParams = {flags: addr_fmt[0], city_radius: addr_fmt[1], dist_from_unit: addr_fmt[2]};
+				}
+
+        // get string of time format
+        wialon.core.Session.getInstance().getCurrUser().getLocale(function(arg, locale){
+
+            var fd = (locale && locale.fd) ? locale.fd : '%Y-%m-%E_%H:%M:%S'; // check for users who have never changed the parameters of the metric
+
+            enFormatTime = wialon.util.DateTime.convertFormat(fd,true).replace(/_/, '&nbsp;&nbsp;').replace(/ /, '&nbsp;');
+            setLocaleDateTime();
+            // init map options
+            OpenLayers.ImgPath = "./img/";
+
+            // options for GurtmMaps layer
+            var opts = {};
+            opts.maxExtent = new OpenLayers.Bounds(-20037508.3427892,-20037508.3427892,20037508.3427892,20037508.3427892);
+            opts.numZoomLevels = 19;
+            opts.maxResolution = 156543.0339;
+            opts.units = 'm';
+            opts.projection = "EPSG:900913";
+            opts.displayProjection = new OpenLayers.Projection("EPSG:4326");
+            // create layer
+            var gurtamMaps = new OpenLayers.Layer.WebGIS("Gurtam Maps", wialon.core.Session.getInstance().getBaseGisUrl("render"), opts);
+
+            opts.controls = [new OpenLayers.Control.GPanZoomBar(), new OpenLayers.Control.GNavigation(), new OpenLayers.Control.KeyboardDefaults()];
+
+            // create map
+            map = new OpenLayers.GMap("map_id", opts);
+            map.addLayer(gurtamMaps);
+            map.zoomToMaxExtent();
+
+            // create markers layer
+            var markersLayer = new OpenLayers.Layer.Markers("markers");
+            layerId = markersLayer.id;
+            markersLayer.setVisibility(true);
+            map.addLayer(markersLayer);
+
+            // init unit table
+            showUnits();
+
+
+        });
 	});		
 }
 
@@ -304,13 +322,12 @@ function redrawUnit(e) {
 	if (type == "changeName") {		
 		$("#unit_name_" + unit.getId()+" div").html(unit.getName());
 	} else if (type == "changePosition") {		
-		$("#unit_speed_" + unit.getId()).html(unit.getPosition().s+"&nbsp;"+$.localise.tr("km/h"));
+		$("#unit_speed_" + unit.getId()).html( ((getMeasureUnits(unit)) ? Math.round( unit.getPosition().s / 1.609344) : unit.getPosition().s) +"&nbsp;" + ( (getMeasureUnits(unit)) ? $.localise.tr("mph") : $.localise.tr("km/h") ));
 		moveMarker(unit);
 	} else if (type == "changeLastMessage") {		
 		var tm = unit.getLastMessage().t;
-		$("#unit_time_" + unit.getId()).html(wialon.util.DateTime.formatDate(tm) + "  " + wialon.util.DateTime.formatTime(tm,2));
-	} else if (type == "changeIcon") {
-		var imgUrl = unit.getIconUrl();
+		$("#unit_time_" + unit.getId()).html( wialon.util.DateTime.formatTime(tm, 0, enFormatTime) );
+	} else if (type == "changeIcon") {		var imgUrl = unit.getIconUrl();
 		$("#unit_img_" + unit.getId() + " img").attr("src",imgUrl);
 		markersArray[unit.getId()].setUrl(imgUrl);
 	}
@@ -329,15 +346,77 @@ function addUnitRow(unit) {
 		tm = lastMessage.t;	
 	var speed = "-";
 	if(unit.getPosition())
-		speed = unit.getPosition().s + "&nbsp;" + $.localise.tr("km/h");
+		speed = ((getMeasureUnits(unit)) ? Math.round( unit.getPosition().s / 1.609344) : unit.getPosition().s) + "&nbsp;" + ( (getMeasureUnits(unit)) ? $.localise.tr("mph") : $.localise.tr("km/h") );
 	var id = unit.getId();
 	var html = "<tr>"
 		+ "<td class='centered' id='unit_img_" + id + "'><img src='" + unit.getIconUrl(24) + "'/></td>"
 		+ "<td id='unit_name_" + id + "' class='shorten-container'><div class='shorten'>" + (speed=="-" ? "":"<a class='row-name' href='#' id='unit_name_"+ id +"'>") + unit.getName() + (speed=="-" ? "":"</a>") + "</div></td>"	
-		+ "<td id='unit_time_" + id + "'>" + (tm!="-"?wialon.util.DateTime.formatDate(tm)+"  "+wialon.util.DateTime.formatTime(tm,2):tm) + "</td>"	
+		+ "<td id='unit_time_" + id + "'>" + (tm!="-"?wialon.util.DateTime.formatTime(tm, 0, enFormatTime):tm) + "</td>"
 		+ "<td id='unit_speed_" + id + "'>" + speed + "</td>"	
 		+ "</tr>";
 	$("#units_tbl").append(html);
+}
+
+/**
+ * get Measure Units
+ */
+function getMeasureUnits (unit) {
+    var metric = unit.getMeasureUnits();
+    metric = (metric) ? metric : 0; // check for users who have never changed the parameters of the metric
+    return metric;
+}
+
+/**
+ * set Locale Date Time
+ */
+function setLocaleDateTime () {
+    var days = [
+            $.localise.tr("Sunday"),
+            $.localise.tr("Monday"),
+            $.localise.tr("Tuesday"),
+            $.localise.tr("Wednesday"),
+            $.localise.tr("Thursday"),
+            $.localise.tr("Friday"),
+            $.localise.tr("Saturday")
+        ],
+        months = [
+            $.localise.tr("January"),
+            $.localise.tr("February"),
+            $.localise.tr("March"),
+            $.localise.tr("April"),
+            $.localise.tr("May"),
+            $.localise.tr("June"),
+            $.localise.tr("July"),
+            $.localise.tr("August"),
+            $.localise.tr("September"),
+            $.localise.tr("October"),
+            $.localise.tr("November"),
+            $.localise.tr("December")
+        ],
+        days_abbrev = [
+            $.localise.tr("Sun"),
+            $.localise.tr("Mon"),
+            $.localise.tr("Tue"),
+            $.localise.tr("Wed"),
+            $.localise.tr("Thu"),
+            $.localise.tr("Fri"),
+            $.localise.tr("Sat")
+        ],
+        months_abbrev = [
+            $.localise.tr("Jan"),
+            $.localise.tr("Feb"),
+            $.localise.tr("Mar"),
+            $.localise.tr("Apr"),
+            $.localise.tr("May"),
+            $.localise.tr("Jun"),
+            $.localise.tr("Jul"),
+            $.localise.tr("Aug"),
+            $.localise.tr("Sep"),
+            $.localise.tr("Oct"),
+            $.localise.tr("Nov"),
+            $.localise.tr("Dec")
+        ];
+    wialon.util.DateTime.setLocale(days, months, days_abbrev, months_abbrev);
 }
 
 /**
