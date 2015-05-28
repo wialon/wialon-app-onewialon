@@ -6,47 +6,59 @@ html, body {
 }
 
 #page {
-    min-height: 100%;      
+    min-height: 100%;
 }
 
 #header {
-    height: 72px;
+    height: 48px;
+    width: 100%;
+    background: #FFF;
+    border-bottom: 2px solid #21344f;
     color: rgb(0, 51, 102);
-    background-color: #fff;
-    border-bottom: 1px solid #21344f;
-} 
+    font-size: 20px;
+}
 
-#header img {
-	margin: 18px 0px 0px 35px;
+#header > * {
+    vertical-align: middle;
+}
+
+#logo {
+    margin: 7px 5px 7px 15px;
+    height: 34px;
+}
+
+#app-name {
+    display: inline-block;
+    color: #473e3f;
 }
 
 #user_info {
-	position: absolute;
-	top: 25px;
-	right: 20px;
+    float: right;
+    margin: 13px 13px 0;
+    color: #777;
 	font-size: 16px;
-	color: #777;
 }
 
-#content {    	
+#content {
     width: 100%;
     position: absolute;
-    top: 73px;
+    top: 50px;
     bottom: 0px;
-    min-height: 100px; 
+    min-height: 100px;
     min-width: 500px;
-    height: auto; 
+    height: auto;
+    overflow: hidden;
 }
 
 #left_column {
 	float: left;
-	height:100%;	
-	width: 430px;
+	height:100%;
+	width: 600px;
 }
 
 #right_column {
 	position: absolute;
-	left: 430px;
+	left: 600px;
 	right: 0px;
 	width: auto;
 	height:100%;
@@ -59,7 +71,7 @@ html, body {
 }
 
 .y-scroll-container{
-	height: 100%;	
+	height: 100%;
 	overflow-y: auto;
 	position: relative;
 }
@@ -74,23 +86,47 @@ a{
 	background-color: #fff;
 	border-spacing: 0;
 	border-collapse: collapse;
-	font-size:12px;	
-	position: absolute;	
+	font-size:12px;
+}
+.tbl tr {
+    cursor: pointer;
+}
+.tbl tr.active {
+    background:#cfcfcf;
 }
 .tbl td{
-	padding: 3px;	
-	border-bottom: 1px solid #d1ddea;	
+	padding: 3px;
+	border-bottom: 1px solid #d1ddea;
 	color: #21344f;
 }
-.tbl td[id^="unit_time"]{
+.tbl td[id^="unit_time"] {
     white-space: nowrap;
 }
 
-.tbl th{
+.tbl th {
 	padding: 5px;
 	background-color: #21344f;
-	color: #ccc;	
+	color: #ccc;
 	text-align: left;
+}
+
+.timepicker {
+
+}
+
+.timepicker .tbl {
+    background-color:#cfcfcf;
+}
+
+.timepicker .tbl td {
+    padding: 5px;
+    text-align: center;
+    font-weight:bold;
+}
+
+.timepicker .tbl td.active {
+    background-color:#21344f;
+    color: #ccc;
 }
 
 .centered {
@@ -127,18 +163,49 @@ a{
 	width:60px;
 }
 
+.filter {}
+
+.filter input {
+    display: inline-block;
+    padding: 9px 5px;
+    width: 95%;
+    background: #fff;
+    border: 0 none;
+    outline: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
 
 /*---------------------- Marker tooltip ------------------------------*/
-.olMarkerLabel { 	
+.olMarkerLabel {
 	font-family: Arial, Helvetica, sans-serif;
-	color: #21344f; 
-	background-color: #fff; 
-	width: auto; 
-	padding: 2px 5px; 
-	border: 1px #21344f solid; 
-	z-index: 1000; 
-	opacity: 0.8;
+	color: #21344f;
+	background-color: #fff;
+	width: auto;
+	padding: 2px 5px;
+	border: 1px #21344f solid;
+	z-index: 1000;
+	opacity: 0.8 !important;
 	text-align: center;
+}
+
+.leaflet-popup-tip-container {
+    display: none;
+}
+
+.leaflet-popup-content-wrapper {
+    background: none transparent;
+    box-shadow: none;
+    padding: 0;
+    text-align: inherit;
+    border-radius: 0;
+}
+
+.leaflet-popup-content {
+    margin: 0;
+    width: auto !important;
+    line-height: inherit;
 }
 
 .label-title {
@@ -154,7 +221,7 @@ a{
 }
 
 .olMarkerLabel table td{
-	font-size: 11px; 	
+	font-size: 11px;
 	padding: 0px;
 	white-space: nowrap;
 }
